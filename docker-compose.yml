@@ -22,7 +22,10 @@ services:
       - DB_DATABASE=sabimul
       - DB_USERNAME=root
       - DB_PASSWORD=secret
+      - VITE_SERVER=http://node:5173
     working_dir: /var/www/html
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
   # Node.js Service for Frontend Compilation
   node:
@@ -30,18 +33,20 @@ services:
       context: ./.docker/node
       dockerfile: Dockerfile
     container_name: sabimul-node
+    volumes:
+      - ./:/var/www/html
     ports:
       - "5173:5173"
     environment:
       - VITE_APP_URL=http://localhost:5173
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
-    volumes:
-      - ./:/var/www/html
-    working_dir: /var/www/html
+      - HOST=0.0.0.0
+      - CHOKIDAR_USEPOLLING=true
     networks:
       - sabimul-network
+    working_dir: /var/www/html
     tty: true
+    depends_on:
+      - app
 
   # MySQL Service
   db:

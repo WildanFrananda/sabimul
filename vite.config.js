@@ -1,4 +1,3 @@
-// vite.config.js
 import { defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin';
 
@@ -18,8 +17,19 @@ export default defineConfig({
         strictPort: true,
         hmr: {
             host: 'localhost',
-            port: 5173,
-            protocol: 'ws'
-        }
-    }
+            protocol: 'ws',
+        },
+        watch: {
+            usePolling: true,
+            interval: 1000,
+        },
+    },
+    // Tambahkan ini untuk memastikan base URL benar
+    base: '/',
+    resolve: {
+        // Bantu Vite menemukan modul node
+        alias: {
+            '@': '/var/www/html/resources',
+        },
+    },
 });

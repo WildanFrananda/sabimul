@@ -6,5 +6,12 @@ WORKDIR /var/www/html
 # Install dependencies
 RUN apk add --no-cache bash
 
-# Command to keep container running
-CMD ["tail", "-f", "/dev/null"]
+# Copy entry point script
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+# Expose port 5173 for Vite
+EXPOSE 5173
+
+# Start Vite server
+ENTRYPOINT ["/entrypoint.sh"]
